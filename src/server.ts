@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 // import * as google from 'actions-on-google';
-import express from 'express';
+import express, { NextFunction, Response, Request } from 'express';
 import morgan from 'morgan';
 import * as si from 'systeminformation';
 import * as Rx from 'rxjs';
@@ -120,7 +120,8 @@ class Server {
 
     const router: express.Router = express.Router();
     router.post('/fulfillment', this.googleApp);
-    router.get('/test', (req, res) => {
+    // router.get('/test', (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    router.get('/test', (req, res, next) => {
       const obsArray: Array<Rx.Observable<any>> = [
         Rx.of(si.cpuTemperature()),
         Rx.of(si.cpu()),
@@ -138,6 +139,7 @@ class Server {
         },
       });
     });
+
     this.app.use('/', router);
   }
 
